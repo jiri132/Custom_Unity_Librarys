@@ -51,7 +51,7 @@ public class Grid
 
 
 	#region Save System Grid
-	public static void _SaveGrid(Grid grid, string worldName)
+	private static void _SaveGrid(Grid grid, string worldName)
 	{
 		BinaryFormatter formatter = new BinaryFormatter();
 		string path = Application.persistentDataPath + $"/{worldName}-GridData.jai";
@@ -63,7 +63,7 @@ public class Grid
 		stream.Close();
 	}
 
-	public static GridData _LoadGrid(string worldName)
+	private static GridData _LoadGrid(string worldName)
 	{
 		string path = Application.persistentDataPath + $"/{worldName}-GridData.jai";
 		if (File.Exists(path))
