@@ -1,5 +1,7 @@
-﻿using System.Threading;
-using UnityEngine;
+﻿using UnityEngine;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 [System.Serializable]
 public class Grid
@@ -47,14 +49,49 @@ public class Grid
 		//Debug.DrawLine(GetWorldPosition(X, 0), GetWorldPosition(X,Y), Color.white, 100f);
 	}
 
+
+	#region Save System Grid
+	public static void _SaveGrid(Grid grid, string worldName)
+	{
+		BinaryFormatter formatter = new BinaryFormatter();
+		string path = Application.persistentDataPath + $"/{worldName}-GridData.jai";
+		FileStream stream = new FileStream(path, FileMode.Create);
+
+		GridData data = new GridData(grid);
+
+		formatter.Serialize(stream, data);
+		stream.Close();
+	}
+
+	public static GridData _LoadGrid(string worldName)
+	{
+		string path = Application.persistentDataPath + $"/{worldName}-GridData.jai";
+		if (File.Exists(path))
+		{
+			BinaryFormatter formatter = new BinaryFormatter();
+			FileStream stream = new FileStream(path, FileMode.Open);
+
+			GridData data = formatter.Deserialize(stream) as GridData;
+			stream.Close();
+
+			return data;
+		}
+		else
+		{
+			Debug.LogError("Save file not found in " + path);
+			return null;
+		}
+	}
+	#endregion
+
 	#region SAVE / LOAD / RELOAD
 	public void SaveGrid(string worldName)
 	{
-		SaveSystem.SaveGrid(this, worldName);
+		_SaveGrid(this, worldName);
 	}
 	public void LoadGrid(string worldName)
 	{
-		GridData data = SaveSystem.LoadGrid(worldName);
+		GridData data = _LoadGrid(worldName);
 
 
 		//singel values
