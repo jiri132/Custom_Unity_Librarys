@@ -41,7 +41,6 @@ public class Grid
 					//Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
 					//Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
 					//Debug.Log($"GridPos [{x} , {y}]");
-					//Thread.Sleep(1);
 				}
 			}
 		}
