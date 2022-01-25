@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
+/// <summary>
+/// Never refference this into other scripts nothing needed
+/// </summary>
 public class SoundManager : MonoBehaviour
 {
 
@@ -11,7 +15,9 @@ public class SoundManager : MonoBehaviour
 	public List<AudioClip> audioClipsSFX;
 	public List<AudioClip> audioClipsMusic;
 	public List<AudioSource> audioSources;
-
+	//dont mind this audiosources
+	static List<AudioSource> StaticAudio;
+	public static List<AudioClip> StaticSFX;
 
 	public enum ManagerType { Random, Continues };
 	public ManagerType managerType;
@@ -23,19 +29,19 @@ public class SoundManager : MonoBehaviour
 
 	//variables for continues
 
-
 	private void Start()
 	{
+		
+		StaticAudio = audioSources;
+		StaticSFX = audioClipsSFX;
+
 		StartCoroutine(Music());
 	}
 
 	IEnumerator Music()
 	{
-		while(true)
+		while(true && audioSources.Count == 2)
 		{
-			
-
-			
 			if (!audioSources[0].isPlaying)
 			{
 				yield return new WaitForSecondsRealtime(s);
@@ -57,11 +63,16 @@ public class SoundManager : MonoBehaviour
 		s = audioSources[0].clip.length;
 		audioSources[0].Play();
 	}
-	public void playSFXclip(int clip, out float s)
+
+	/// <summary>
+	/// Play a sound effect from this void
+	/// use all the static variables for this
+	/// </summary>
+	/// <param name="clip">the SFX clip used to play</param>
+	public static void playSFXclip(int clip)
 	{
-		audioSources[1].clip = audioClipsSFX[clip];
-		s = audioSources[1].clip.length;
-		audioSources[1].Play();
+		StaticAudio[1].clip = StaticSFX[clip];
+		StaticAudio[1].Play();
 	}
 }
 
@@ -71,22 +82,20 @@ public class SoundManager : MonoBehaviour
 [CustomEditor(typeof(SoundManager))]
 public class SoundManagerInspectorEditor : Editor
 {
-
-
 	public override void OnInspectorGUI()
 	{
 
 		var soundManager = target as SoundManager;
 
 		soundManager.managerType = (SoundManager.ManagerType)EditorGUILayout.EnumPopup(soundManager.managerType);
-
+		
 		switch (soundManager.managerType)
 		{
 			case SoundManager.ManagerType.Random:
+				EditorGUILayout.LabelField("OPTIONAL VARIABLES ", "Effects with chosen method of sound");
 				soundManager.WaitingTimeSeconds = EditorGUILayout.IntField("Waiting Seconds", soundManager.WaitingTimeSeconds);
 				soundManager.RandomClip = (AudioClip)EditorGUILayout.ObjectField("Random Clip",soundManager.RandomClip, typeof(AudioClip),true);
 				break;	
-
 
 			case SoundManager.ManagerType.Continues:
 
@@ -97,6 +106,14 @@ public class SoundManagerInspectorEditor : Editor
 			default:
 				break;
 		}
+		EditorGUILayout.LabelField("", "");
+		EditorGUILayout.LabelField("GLOBAL VARIABLES", "All lists for functionality");
+		var SourceList = serializedObject.FindProperty("audioSources");
+		var MusicList = serializedObject.FindProperty("audioClipsMusic");
+		var SFXList = serializedObject.FindProperty("audioClipsSFX");
+		EditorGUILayout.PropertyField(SourceList, new GUIContent("audioSouces List"), true);
+		EditorGUILayout.PropertyField(MusicList, new GUIContent("Music List"), true);
+		EditorGUILayout.PropertyField(SFXList, new GUIContent("Sound Effects List"), true);
 
 	}
 }//end inspectorclass
