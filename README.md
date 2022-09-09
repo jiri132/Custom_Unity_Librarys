@@ -2,8 +2,8 @@
 These are all of my own made custom unity librarys from the grid system to sound/audio managers all equipped with custom UI in the editor.<br>
 
 ## Contains librarys
--Grid Manager [GITHUB->Unity installment](https://github.com/jiri132/GridManager-UnityLib)
--Sound Manager
+-Grid Manager [GITHUB->Unity installment](https://github.com/jiri132/GridManager-UnityLib) <br>
+-Sound Manager<br>
 
 <hr>
  
