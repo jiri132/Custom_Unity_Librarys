@@ -12,7 +12,7 @@ For each library tha is out will be an official new repo to get the manager form
 More info is availible on their own pages
  
 ## Development
-###Grid manager
+### Grid manager
 Look in the repository of the gridmanager download there will everything be documented
 
 ### Sound Manager
